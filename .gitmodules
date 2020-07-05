@@ -1,0 +1,3 @@
+[submodule "detection/mtcnn"]
+	path = detection/mtcnn
+	url = https://github.com/ipazc/mtcnn.git
