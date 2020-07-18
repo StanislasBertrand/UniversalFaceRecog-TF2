@@ -7,7 +7,7 @@ from .rcnn.processing.nms import gpu_nms_wrapper, cpu_nms_wrapper
 from .networks.retinaface_network import RetinaFaceNetwork
 import time
 
-class RetinaFace:
+class FaceDetector:
     def __init__(self, model_weights, use_gpu_nms=True, nms=0.4, decay4=0.5):
         self.decay4 = decay4
         self.nms_threshold = nms

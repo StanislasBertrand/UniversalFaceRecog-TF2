@@ -7,7 +7,7 @@ flags.DEFINE_string('celebs_file', './data/celebrities.txt', 'file containing li
 flags.DEFINE_string('save_dir', './data/images/bing_images/', 'output dir to save crawled images in')
 
 
-def _main(argv):
+def _main(_argv):
     celebrities_list = []
     with open(FLAGS.celebs_file) as f:
         for line in f:

@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from absl import app, flags
 from absl.flags import FLAGS
-from retinaface import RetinaFace
+from FaceDetector import FaceDetector
 
 flags.DEFINE_string('weights_path', './data/retinafaceweights.npy',
                     'network weights path')
@@ -14,7 +14,7 @@ flags.DEFINE_bool('use_gpu_nms', True, "whether to use gpu for nms")
 
 
 def _main(_argv):
-    detector = RetinaFace(FLAGS.weights_path, FLAGS.use_gpu_nms, FLAGS.nms_thresh)
+    detector = FaceDetector(FLAGS.weights_path, FLAGS.use_gpu_nms, FLAGS.nms_thresh)
     img = cv2.imread(FLAGS.sample_img)
     faces, landmarks = detector.detect(img, FLAGS.det_thresh)
     if faces is not None:
