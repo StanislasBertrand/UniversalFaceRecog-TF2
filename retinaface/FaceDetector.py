@@ -1,11 +1,10 @@
 from __future__ import print_function
-import numpy as np
 import cv2
-from .rcnn.processing.bbox_transform import clip_boxes
-from .rcnn.processing.generate_anchor import generate_anchors_fpn, anchors_plane
-from .rcnn.processing.nms import gpu_nms_wrapper, cpu_nms_wrapper
-from .networks.retinaface_network import RetinaFaceNetwork
-import time
+import numpy as np
+from retinaface.rcnn.processing.bbox_transform import clip_boxes
+from retinaface.rcnn.processing.generate_anchor import generate_anchors_fpn, anchors_plane
+from retinaface.rcnn.processing.nms import gpu_nms_wrapper, cpu_nms_wrapper
+from retinaface.networks.retinaface_network import RetinaFaceNetwork
 
 class FaceDetector:
     def __init__(self, model_weights, use_gpu_nms=True, nms=0.4, decay4=0.5):
