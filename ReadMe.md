@@ -47,6 +47,8 @@ This folder contains scripts to add any person to the face recognition database
 ![testing on heat](sample-results/heat_output.jpg)
 ![testing on emmas](sample-results/emmas_output.jpg)
 ![testing on tarantino](sample-results/hollywood_output.jpg)
+![testing on pulp](sample-results/pulp_output.jpg)
+![testing on batman](sample-results/batman_output.jpg)
 
 *****
 ### TODO
