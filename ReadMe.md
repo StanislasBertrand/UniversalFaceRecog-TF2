@@ -36,8 +36,8 @@ This folder contains the code for face detection and alignment. It is based on [
 
 **recognition**  
 This folder contains the code that takes as input a face and recognizes a person, in two steps:
-* Deep learning based face embedding extraction
-* nearest neighbor search to find a matching embedding of a person in our database   
+* Deep learning based face embedding extraction. This neural network take as input a face, returns a feature vector of size 512.
+* nearest neighbor search to find a matching embedding of a person in our database. Takes a input an embedding vector, and tries to look for similar embedding vectors in our people database. If a vector in our database is close enough, then we have found that person.
 
 **train**  
 This folder contains scripts to add any person to the face recognition database
