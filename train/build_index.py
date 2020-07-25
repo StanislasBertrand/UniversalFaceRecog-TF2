@@ -3,8 +3,6 @@ import cv2
 import numpy as np
 import nmslib
 import json
-import sys
-sys.path.insert(1, '../recognition/face_embedder_network')
 from recognition.face_embedder_network import FaceEmbedder
 
 def build_index(celebs_file, faces_dir, embeddings_dir, models_dir):

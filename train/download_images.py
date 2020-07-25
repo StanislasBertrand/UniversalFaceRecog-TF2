@@ -1,5 +1,4 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 from icrawler.builtin import BingImageCrawler
 
 def download_images(celebs_file, save_dir):

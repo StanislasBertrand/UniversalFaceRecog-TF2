@@ -1,8 +1,6 @@
 import os
 import cv2
 import numpy as np
-import sys
-sys.path.insert(1, '../recognition/face_embedder_network')
 from recognition.face_embedder_network import FaceEmbedder
 from scipy.spatial.distance import cosine
 

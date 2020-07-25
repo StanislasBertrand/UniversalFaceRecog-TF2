@@ -1,5 +1,4 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from datetime import timedelta
