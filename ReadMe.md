@@ -7,14 +7,14 @@ example output :
 ![testing on a leaders_photo](sample-results/leaders_output.jpg)   
 Check out more examples at the bottom of the page !
 
-## Installation
+## INSTALLATION
 run
 ```angular2
 python setup.py install
 ```
 If you dont have a GPU, change the line tensoflow-gpu==2.0.1 to tensorflow==2.0.1 from the setup.py file.
 
-## Run recognition
+## USAGE
 First, download the pretrained models and list of available celebrities from [DropBox](https://www.dropbox.com/sh/34vd1zmtsdch8ln/AABfP5l3ITZo5jzgvZaiZZ3ja?dl=0),
 and place the models in the ./models folder
 
@@ -23,10 +23,27 @@ Run :
 python recognition.py --sample_img="./sample-images/leaders.jpg" --save_destination="./sample-results/leaders_output.jpg"
 ```
 
-## Add your own celebrities
+Python usage : 
+```python
+import cv2
+from retinaface.FaceDetector import FaceDetector
+from retinaface.alignment import extract_aligned_faces
+from recognition.FaceRecognizer import FaceRecognizer
+
+detector = FaceDetector("./models/retinafaceweights.npy", False, 0.4)
+recognizer = FaceRecognizer("./models/index.nms", "./models/celebrities_mapping.json", "./models/faceEmbeddings.npy")
+
+img = cv2.imread("./sample-images/leaders.jpg")
+faces, landmarks = detector.detect(img, 0.9)
+aligned_faces = extract_aligned_faces(img, landmarks)
+aligned_face = aligned_faces[0]
+found_person = recognizer.run(aligned_face, 0.6)
+```
+
+## ADD YOUR OWN CELEBRITIES
 In order to add more people to the recognition database, follow the [tutorial](train/tutorial.md)
 
-## Structure
+## STRUCTURE
 **retinaface**   
 This folder contains the code for face detection and alignment. It is based on [this original paper](https://arxiv.org/pdf/1905.00641.pdf), and [this implementation](https://github.com/StanislasBertrand/RetinaFace-tf2).   
 
@@ -38,7 +55,7 @@ This folder contains the code that takes as input a face and recognizes a person
 **train**  
 This folder contains scripts to add any person to the face recognition database
 
-## Example outputs
+## EXAMPLE OUTPUTS
 ![testing on heat](sample-results/heat_output.jpg)
 ![testing on emmas](sample-results/emmas_output.jpg)
 ![testing on tarantino](sample-results/hollywood_output.jpg)
@@ -57,7 +74,7 @@ This folder contains scripts to add any person to the face recognition database
 * Increase accuracy on low res images by augmenting train images
 * Finish airflow pipeline for database creation
 
-## Acknowledgements
+## ACKONWLEDGEMENTS
 Most of this work is based on the work of [Insightface](https://github.com/deepinsight/insightface#512-d-feature-embedding) and [MMdnn](https://github.com/microsoft/MMdnn)
 If you use this repo, please reference the original face detection work :
 
