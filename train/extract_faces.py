@@ -1,6 +1,5 @@
 import os
 import cv2
-import numpy as np
 from retinaface.FaceDetector import FaceDetector
 from retinaface.alignment import extract_aligned_faces
 
@@ -29,11 +28,8 @@ def extract_faces(celebs_file, photos_dir, faces_dir, weights_path):
             try:
                 img = cv2.imread(os.path.join(celeb_photos_dir, file))
                 faces, landmarks = detector.detect(img, 0.9)
-                for i in range(len(faces)):
-                    landmarks_xs = landmarks[i][:,0]
-                    landmarks_ys = landmarks[i][:,1]
-                    points = np.concatenate([landmarks_xs, landmarks_ys], axis = 0).reshape(1,10)
-                    aligned_face = extract_aligned_faces(img, points)[0]
+                aligned_faces = extract_aligned_faces(img, landmarks)
+                for aligned_face in aligned_faces:
                     cv2.imwrite(os.path.join(celeb_faces_dir, str(count_faces) + ".jpg"), aligned_face)
                     count_faces += 1
             except Exception as e:
