@@ -82,7 +82,7 @@ def find_tfrom_between_shapes(from_shape, to_shape):
 
     return tran_m, tran_b
 
-def extract_aligned_faces(img, points, desired_size=112, padding=0):
+def extract_aligned_faces(img, landmarks, desired_size=112, padding=0):
     """
         crop and align face
     Parameters:
@@ -97,57 +97,63 @@ def extract_aligned_faces(img, points, desired_size=112, padding=0):
         crop_imgs: list, n
             cropped and aligned faces 
     """
+
     crop_imgs = []
-    for p in points:
-        shape  =[]
-        for k in range(int(len(p)/2)):
-            shape.append(p[k])
-            shape.append(p[k+5])
+    for landmark in landmarks:
+        landmarks_xs = landmark[:, 0]
+        landmarks_ys = landmark[:, 1]
+        points = np.concatenate([landmarks_xs, landmarks_ys], axis=0).reshape(1, 10)
 
-        if padding > 0:
-            padding = padding
-        else:
-            padding = 0
-        # average positions of face points
-        mean_face_shape_x = [0.224152, 0.75610125, 0.490127, 0.254149, 0.726104]
-        mean_face_shape_y = [0.2119465, 0.2119465, 0.628106, 0.780233, 0.780233]
+        for p in points:
+            shape  =[]
+            for k in range(int(len(p)/2)):
+                shape.append(p[k])
+                shape.append(p[k+5])
 
-        from_points = []
-        to_points = []
+            if padding > 0:
+                padding = padding
+            else:
+                padding = 0
+            # average positions of face points
+            mean_face_shape_x = [0.224152, 0.75610125, 0.490127, 0.254149, 0.726104]
+            mean_face_shape_y = [0.2119465, 0.2119465, 0.628106, 0.780233, 0.780233]
 
-        for i in range(int(len(shape)/2)):
-            x = (padding + mean_face_shape_x[i]) / (2 * padding + 1) * desired_size
-            y = (padding + mean_face_shape_y[i]) / (2 * padding + 1) * desired_size
-            to_points.append([x, y])
-            from_points.append([shape[2*i], shape[2*i+1]])
+            from_points = []
+            to_points = []
 
-        # convert the points to Mat
-        from_mat = list2colmatrix(from_points)
-        to_mat = list2colmatrix(to_points)
+            for i in range(int(len(shape)/2)):
+                x = (padding + mean_face_shape_x[i]) / (2 * padding + 1) * desired_size
+                y = (padding + mean_face_shape_y[i]) / (2 * padding + 1) * desired_size
+                to_points.append([x, y])
+                from_points.append([shape[2*i], shape[2*i+1]])
 
-        # compute the similar transfrom
-        tran_m, tran_b = find_tfrom_between_shapes(from_mat, to_mat)
+            # convert the points to Mat
+            from_mat = list2colmatrix(from_points)
+            to_mat = list2colmatrix(to_points)
 
-        probe_vec = np.matrix([1.0, 0.0]).transpose()
-        probe_vec = tran_m * probe_vec
+            # compute the similar transfrom
+            tran_m, tran_b = find_tfrom_between_shapes(from_mat, to_mat)
 
-        scale = np.linalg.norm(probe_vec)
-        angle = 180.0 / math.pi * math.atan2(probe_vec[1, 0], probe_vec[0, 0])
+            probe_vec = np.matrix([1.0, 0.0]).transpose()
+            probe_vec = tran_m * probe_vec
 
-        from_center = [(shape[0]+shape[2])/2.0, (shape[1]+shape[3])/2.0]
-        to_center = [0, 0]
-        to_center[1] = desired_size * 0.4
-        to_center[0] = desired_size * 0.5
+            scale = np.linalg.norm(probe_vec)
+            angle = 180.0 / math.pi * math.atan2(probe_vec[1, 0], probe_vec[0, 0])
 
-        ex = to_center[0] - from_center[0]
-        ey = to_center[1] - from_center[1]
+            from_center = [(shape[0]+shape[2])/2.0, (shape[1]+shape[3])/2.0]
+            to_center = [0, 0]
+            to_center[1] = desired_size * 0.4
+            to_center[0] = desired_size * 0.5
 
-        rot_mat = cv2.getRotationMatrix2D((from_center[0], from_center[1]), -1*angle, scale)
-        rot_mat[0][2] += ex
-        rot_mat[1][2] += ey
+            ex = to_center[0] - from_center[0]
+            ey = to_center[1] - from_center[1]
 
-        faces = cv2.warpAffine(img, rot_mat, (desired_size, desired_size))
-        crop_imgs.append(faces)
+            rot_mat = cv2.getRotationMatrix2D((from_center[0], from_center[1]), -1*angle, scale)
+            rot_mat[0][2] += ex
+            rot_mat[1][2] += ey
+
+            faces = cv2.warpAffine(img, rot_mat, (desired_size, desired_size))
+            crop_imgs.append(faces)
  
     return crop_imgs
 
