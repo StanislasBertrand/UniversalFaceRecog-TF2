@@ -166,7 +166,7 @@ setup(
     # inject our custom trigger
     cmdclass={'build_ext': custom_build_ext},
     install_requires = [
-        "tensorflow-gpu==2.0.3",
+        "tensorflow-gpu==2.7.2",
         "opencv-python",
         "nmslib",
         "icrawler"
